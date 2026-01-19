@@ -1,0 +1,169 @@
+/* Winamp Classic Skin Styles */
+
+.winamp-container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  image-rendering: pixelated;
+}
+
+/* LCD Font styling */
+.font-lcd {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+}
+
+/* Winamp button press effect */
+.winamp-btn:active {
+  transform: translateY(1px);
+}
+
+/* Marquee animation for track info */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 10s linear infinite;
+  display: inline-block;
+  padding-right: 100%;
+}
+
+/* Visualization bar animation */
+@keyframes visualizer {
+  0%, 100% {
+    height: 10%;
+  }
+  50% {
+    height: 90%;
+  }
+}
+
+/* Winamp display gradient background */
+.winamp-display {
+  background: linear-gradient(180deg,
+    #0a0a14 0%,
+    #0f0f1f 50%,
+    #0a0a14 100%
+  );
+}
+
+/* LCD display effect */
+.winamp-lcd {
+  box-shadow:
+    inset 0 0 10px rgba(0, 255, 0, 0.1),
+    inset 0 0 2px rgba(0, 255, 0, 0.2);
+}
+
+.winamp-lcd span {
+  text-shadow:
+    0 0 5px rgba(0, 255, 0, 0.5),
+    0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+/* Beveled edge effect for buttons */
+.winamp-main {
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.1),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Classic Winamp scrollbar */
+.winamp-playlist ::-webkit-scrollbar {
+  width: 10px;
+}
+
+.winamp-playlist ::-webkit-scrollbar-track {
+  background: #0a0a0a;
+  border: 1px solid #3a3a5c;
+}
+
+.winamp-playlist ::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #3a3a5c, #4a4a6c, #3a3a5c);
+  border: 1px solid #5a5a7c;
+}
+
+.winamp-playlist ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, #4a4a6c, #5a5a7c, #4a4a6c);
+}
+
+/* Scan line effect (optional, for extra retro feel) */
+.winamp-display::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.1) 0px,
+    rgba(0, 0, 0, 0.1) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+}
+
+/* Green phosphor glow effect */
+.text-\[#00ff00\] {
+  text-shadow: 0 0 3px rgba(0, 255, 0, 0.5);
+}
+
+/* Selection highlight for playlist */
+.winamp-playlist .bg-\[#0000aa\] {
+  background: linear-gradient(180deg, #0000cc 0%, #0000aa 50%, #000088 100%);
+}
+
+/* Hover effect for playlist items */
+.winamp-playlist .hover\:bg-\[#1a1a3a\]:hover {
+  background: rgba(0, 255, 0, 0.05);
+}
+
+/* Metallic button appearance */
+.winamp-btn {
+  background: linear-gradient(180deg,
+    #4a4a6c 0%,
+    #3a3a5c 30%,
+    #2a2a4c 70%,
+    #3a3a5c 100%
+  );
+  transition: all 0.05s ease;
+}
+
+.winamp-btn:hover {
+  filter: brightness(1.1);
+}
+
+.winamp-btn:active {
+  background: linear-gradient(180deg,
+    #2a2a4c 0%,
+    #3a3a5c 30%,
+    #4a4a6c 70%,
+    #3a3a5c 100%
+  );
+}
+
+/* Spectrum analyzer bars */
+.winamp-display .bg-gradient-to-t {
+  transition: height 0.1s ease;
+}
+
+/* Window resize grip */
+.winamp-playlist::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 8px;
+  height: 8px;
+  cursor: se-resize;
+  background:
+    linear-gradient(135deg, transparent 50%, #4a4a6a 50%),
+    linear-gradient(135deg, transparent 60%, #3a3a5c 60%),
+    linear-gradient(135deg, transparent 70%, #2a2a4c 70%);
+}

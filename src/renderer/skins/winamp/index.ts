@@ -1,0 +1,1 @@
+export { WinampSkin } from './WinampSkin';
