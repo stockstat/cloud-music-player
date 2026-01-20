@@ -25,7 +25,7 @@ export interface Playlist {
 
 export type RepeatMode = 'off' | 'all' | 'one';
 export type ShuffleMode = 'off' | 'on';
-export type SkinType = 'modern' | 'winamp';
+export type SkinType = 'modern';
 
 export interface PlayerState {
   // Current playback

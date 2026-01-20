@@ -43,8 +43,8 @@ function RatingStars({ rating = 0, onChange }: RatingStarsProps) {
         >
           <span className={
             (hoverRating || rating) >= star
-              ? 'text-yellow-400'
-              : 'text-gray-600'
+              ? 'text-amber-400'
+              : 'text-slate-300'
           }>
             *
           </span>
@@ -164,7 +164,7 @@ export function ColumnTrackList({ tracks, onTrackSelect }: ColumnTrackListProps)
   const renderSortIndicator = (field?: SortField) => {
     if (!field || sortField !== field) return null;
     return (
-      <span className="ml-1 text-blue-400">
+      <span className="ml-1 text-indigo-500">
         {sortDirection === 'asc' ? (
           <svg className="w-3 h-3 inline" fill="currentColor" viewBox="0 0 12 12">
             <path d="M6 2l4 6H2z"/>
@@ -182,9 +182,9 @@ export function ColumnTrackList({ tracks, onTrackSelect }: ColumnTrackListProps)
     switch (column.id) {
       case 'trackNumber':
         return (
-          <span className="text-gray-500">
+          <span className="text-slate-400">
             {currentTrack?.id === track.id ? (
-              <span className="text-green-400">*</span>
+              <span className="text-green-500">*</span>
             ) : (
               index + 1
             )}
@@ -200,27 +200,27 @@ export function ColumnTrackList({ tracks, onTrackSelect }: ColumnTrackListProps)
                 className="w-6 h-6 rounded flex-shrink-0 object-cover"
               />
             ) : (
-              <div className="w-6 h-6 rounded flex-shrink-0 bg-[#3a3a4a] flex items-center justify-center">
-                <svg className="w-3 h-3 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+              <div className="w-6 h-6 rounded flex-shrink-0 bg-slate-100 flex items-center justify-center">
+                <svg className="w-3 h-3 text-slate-400" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
                 </svg>
               </div>
             )}
-            <span className="truncate">{track.title}</span>
+            <span className="truncate text-slate-700">{track.title}</span>
           </div>
         );
       case 'artist':
-        return <span className="truncate text-gray-400">{track.artist || '-'}</span>;
+        return <span className="truncate text-slate-500">{track.artist || '-'}</span>;
       case 'album':
-        return <span className="truncate text-gray-400">{track.album || '-'}</span>;
+        return <span className="truncate text-slate-500">{track.album || '-'}</span>;
       case 'year':
-        return <span className="text-gray-400">{track.year || '-'}</span>;
+        return <span className="text-slate-500">{track.year || '-'}</span>;
       case 'genre':
-        return <span className="truncate text-gray-400">{track.genre || '-'}</span>;
+        return <span className="truncate text-slate-500">{track.genre || '-'}</span>;
       case 'duration':
-        return <span className="text-gray-400">{formatDuration(track.duration)}</span>;
+        return <span className="text-slate-500">{formatDuration(track.duration)}</span>;
       case 'bitrate':
-        return <span className="text-gray-400">{formatBitrate(track.bitrate)}</span>;
+        return <span className="text-slate-500">{formatBitrate(track.bitrate)}</span>;
       case 'rating':
         return <RatingStars rating={0} />;
       default:
@@ -230,20 +230,20 @@ export function ColumnTrackList({ tracks, onTrackSelect }: ColumnTrackListProps)
 
   if (tracks.length === 0) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center text-gray-500 bg-[#1a1a2a]">
+      <div className="flex-1 flex flex-col items-center justify-center text-slate-400 bg-slate-50">
         <svg className="w-16 h-16 mb-4 opacity-30" fill="currentColor" viewBox="0 0 24 24">
           <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
         </svg>
         <p className="text-sm font-medium mb-1">No tracks</p>
-        <p className="text-xs text-gray-600">Add music to your library to get started</p>
+        <p className="text-xs text-slate-400">Add music to your library to get started</p>
       </div>
     );
   }
 
   return (
-    <div ref={tableRef} className="flex-1 flex flex-col overflow-hidden bg-[#1a1a2a]">
+    <div ref={tableRef} className="flex-1 flex flex-col overflow-hidden bg-white">
       {/* Header */}
-      <div className="flex border-b border-[#2a2a3a] bg-[#252535] select-none">
+      <div className="flex border-b border-slate-200 bg-slate-50 select-none">
         {columns.map((column) => (
           <div
             key={column.id}
@@ -252,7 +252,7 @@ export function ColumnTrackList({ tracks, onTrackSelect }: ColumnTrackListProps)
           >
             <button
               onClick={() => handleSort(column.sortField)}
-              className={`flex-1 px-2 py-1.5 text-left text-[11px] font-semibold text-gray-400 hover:text-white hover:bg-[#2a2a3a] transition-colors truncate ${
+              className={`flex-1 px-2 py-1.5 text-left text-[11px] font-semibold text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition-colors truncate ${
                 column.align === 'right' ? 'text-right' : column.align === 'center' ? 'text-center' : ''
               } ${column.sortField ? 'cursor-pointer' : 'cursor-default'}`}
             >
@@ -262,7 +262,7 @@ export function ColumnTrackList({ tracks, onTrackSelect }: ColumnTrackListProps)
             {/* Resize handle */}
             <div
               onMouseDown={(e) => handleColumnResize(column.id, e)}
-              className="absolute right-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-blue-500 z-10"
+              className="absolute right-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-indigo-400 z-10"
             />
           </div>
         ))}
@@ -281,13 +281,13 @@ export function ColumnTrackList({ tracks, onTrackSelect }: ColumnTrackListProps)
               onDoubleClick={() => handleTrackDoubleClick(track, index)}
               className={`flex cursor-pointer transition-colors ${
                 isSelected
-                  ? 'bg-[#3a5070]'
+                  ? 'bg-indigo-100'
                   : isPlaying
-                  ? 'bg-[#2a3a4a]'
+                  ? 'bg-green-50'
                   : index % 2 === 0
-                  ? 'bg-[#1a1a2a]'
-                  : 'bg-[#1e1e2e]'
-              } hover:bg-[#2a3a4a]`}
+                  ? 'bg-white'
+                  : 'bg-slate-50'
+              } hover:bg-indigo-50`}
             >
               {columns.map((column) => (
                 <div

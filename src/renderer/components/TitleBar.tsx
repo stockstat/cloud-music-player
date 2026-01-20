@@ -1,87 +1,47 @@
-import { usePlayerStore } from '../store/playerStore';
-
 interface TitleBarProps {
-  variant?: 'modern' | 'winamp';
+  variant?: 'modern';
 }
 
 export function TitleBar({ variant = 'modern' }: TitleBarProps) {
-  const { skin, setSkin } = usePlayerStore();
-
   const handleMinimize = () => window.electronAPI?.minimize();
   const handleMaximize = () => window.electronAPI?.maximize();
   const handleClose = () => window.electronAPI?.close();
 
-  if (variant === 'winamp') {
-    return (
-      <div className="winamp-titlebar h-[14px] bg-gradient-to-b from-[#1e3a5f] to-[#0a1628] flex items-center justify-between px-1 drag-region">
-        <div className="flex items-center gap-1 no-drag">
-          <button
-            onClick={() => setSkin(skin === 'winamp' ? 'modern' : 'winamp')}
-            className="w-[9px] h-[9px] bg-[#1e3a5f] border border-[#4080ff] text-[6px] flex items-center justify-center hover:bg-[#4080ff] transition-colors"
-            title="Toggle skin"
-          >
-            <span className="text-[#4080ff] hover:text-white">◈</span>
-          </button>
-        </div>
-        <span className="text-[8px] text-[#4080ff] font-bold tracking-wide">CLOUD MUSIC PLAYER</span>
-        <div className="flex items-center gap-[2px] no-drag">
-          <button
-            onClick={handleMinimize}
-            className="w-[9px] h-[9px] bg-[#1e3a5f] border border-[#4080ff] text-[8px] leading-none text-[#4080ff] hover:bg-[#4080ff] hover:text-white transition-colors"
-          >
-            _
-          </button>
-          <button
-            onClick={handleMaximize}
-            className="w-[9px] h-[9px] bg-[#1e3a5f] border border-[#4080ff] text-[6px] leading-none text-[#4080ff] hover:bg-[#4080ff] hover:text-white transition-colors"
-          >
-            □
-          </button>
-          <button
-            onClick={handleClose}
-            className="w-[9px] h-[9px] bg-[#1e3a5f] border border-[#4080ff] text-[8px] leading-none text-[#4080ff] hover:bg-[#ff4040] hover:text-white transition-colors"
-          >
-            ×
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="h-10 bg-app-surface flex items-center justify-between px-4 drag-region border-b border-app-surface-light">
+    <div className="h-10 bg-white flex items-center justify-between px-4 drag-region border-b border-slate-200">
       <div className="flex items-center gap-3 no-drag">
-        <div className="w-6 h-6 bg-app-accent rounded-lg flex items-center justify-center">
-          <span className="text-white text-xs font-bold">♪</span>
+        <div className="w-7 h-7 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center shadow-sm">
+          <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+          </svg>
         </div>
-        <span className="text-app-text font-medium text-sm">Cloud Music Player</span>
+        <span className="text-slate-700 font-semibold text-sm">Cloud Music Player</span>
       </div>
 
-      <div className="flex items-center gap-2 no-drag">
-        <button
-          onClick={() => setSkin(skin === 'modern' ? 'winamp' : 'modern')}
-          className="px-3 py-1 text-xs bg-app-surface-light hover:bg-app-accent text-app-text-muted hover:text-white rounded transition-colors"
-          title="Switch to Winamp skin"
-        >
-          {skin === 'modern' ? '🎵 Classic' : '✨ Modern'}
-        </button>
+      <div className="flex items-center gap-1 no-drag">
         <button
           onClick={handleMinimize}
-          className="w-8 h-8 flex items-center justify-center text-app-text-muted hover:text-app-text hover:bg-app-surface-light rounded transition-colors"
+          className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded transition-colors"
         >
-          −
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+          </svg>
         </button>
         <button
           onClick={handleMaximize}
-          className="w-8 h-8 flex items-center justify-center text-app-text-muted hover:text-app-text hover:bg-app-surface-light rounded transition-colors"
+          className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded transition-colors"
         >
-          □
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4h4M20 8V4h-4M4 16v4h4M20 16v4h-4" />
+          </svg>
         </button>
         <button
           onClick={handleClose}
-          className="w-8 h-8 flex items-center justify-center text-app-text-muted hover:text-white hover:bg-red-500 rounded transition-colors"
+          className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-white hover:bg-red-500 rounded transition-colors"
         >
-          ×
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
         </button>
       </div>
     </div>
