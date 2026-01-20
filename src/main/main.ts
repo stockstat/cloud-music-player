@@ -6,6 +6,90 @@ import * as mm from 'music-metadata';
 // Cache for artwork data URLs
 const artworkCache = new Map<string, string>();
 
+// Folder artwork cache (folder path -> artwork data URL)
+const folderArtworkCache = new Map<string, string | null>();
+
+// Common folder artwork filenames (case-insensitive)
+const ARTWORK_FILENAMES = [
+  'cover', 'folder', 'album', 'front', 'art', 'artwork', 'albumart',
+  'albumartsmall', 'albumartlarge', 'thumb', 'thumbnail', 'disc', 'cd'
+];
+const ARTWORK_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
+
+// Find folder artwork in a directory
+async function findFolderArtwork(folderPath: string): Promise<string | null> {
+  // Check cache first
+  if (folderArtworkCache.has(folderPath)) {
+    return folderArtworkCache.get(folderPath) || null;
+  }
+
+  try {
+    const entries = await fs.promises.readdir(folderPath, { withFileTypes: true });
+    const files = entries.filter(e => e.isFile()).map(e => e.name);
+
+    // Look for artwork files
+    for (const artName of ARTWORK_FILENAMES) {
+      for (const ext of ARTWORK_EXTENSIONS) {
+        // Check exact match (case-insensitive)
+        const found = files.find(f => f.toLowerCase() === `${artName}${ext}`);
+        if (found) {
+          const artworkPath = path.join(folderPath, found);
+          const artworkDataUrl = await loadImageAsDataUrl(artworkPath);
+          if (artworkDataUrl) {
+            // Cache the result (limit cache size)
+            if (folderArtworkCache.size > 200) {
+              const firstKey = folderArtworkCache.keys().next().value;
+              if (firstKey) folderArtworkCache.delete(firstKey);
+            }
+            folderArtworkCache.set(folderPath, artworkDataUrl);
+            return artworkDataUrl;
+          }
+        }
+      }
+    }
+
+    // Also check for any image file if no standard names found
+    for (const file of files) {
+      const ext = path.extname(file).toLowerCase();
+      if (ARTWORK_EXTENSIONS.includes(ext)) {
+        const artworkPath = path.join(folderPath, file);
+        const artworkDataUrl = await loadImageAsDataUrl(artworkPath);
+        if (artworkDataUrl) {
+          folderArtworkCache.set(folderPath, artworkDataUrl);
+          return artworkDataUrl;
+        }
+      }
+    }
+
+    // Cache null result to avoid re-scanning
+    folderArtworkCache.set(folderPath, null);
+    return null;
+  } catch (error) {
+    console.error(`Error finding folder artwork in ${folderPath}:`, error);
+    folderArtworkCache.set(folderPath, null);
+    return null;
+  }
+}
+
+// Load image file as data URL
+async function loadImageAsDataUrl(imagePath: string): Promise<string | null> {
+  try {
+    const buffer = await fs.promises.readFile(imagePath);
+    const ext = path.extname(imagePath).toLowerCase();
+    let mimeType = 'image/jpeg';
+    if (ext === '.png') mimeType = 'image/png';
+    else if (ext === '.gif') mimeType = 'image/gif';
+    else if (ext === '.bmp') mimeType = 'image/bmp';
+    else if (ext === '.webp') mimeType = 'image/webp';
+
+    const base64 = buffer.toString('base64');
+    return `data:${mimeType};base64,${base64}`;
+  } catch (error) {
+    console.error(`Error loading image ${imagePath}:`, error);
+    return null;
+  }
+}
+
 interface TrackMetadata {
   title: string;
   artist: string;
@@ -122,7 +206,7 @@ ipcMain.handle('metadata:parse', async (_, filePath: string): Promise<TrackMetad
     const metadata = await mm.parseFile(filePath);
     const { common, format } = metadata;
 
-    // Extract artwork if available
+    // Extract artwork if available (embedded first)
     let artworkDataUrl: string | undefined;
     if (common.picture && common.picture.length > 0) {
       const picture = common.picture[0];
@@ -139,6 +223,15 @@ ipcMain.handle('metadata:parse', async (_, filePath: string): Promise<TrackMetad
           if (firstKey) artworkCache.delete(firstKey);
         }
         artworkCache.set(cacheKey, artworkDataUrl);
+      }
+    }
+
+    // If no embedded artwork, look for folder artwork
+    if (!artworkDataUrl) {
+      const folderPath = path.dirname(filePath);
+      const folderArtwork = await findFolderArtwork(folderPath);
+      if (folderArtwork) {
+        artworkDataUrl = folderArtwork;
       }
     }
 
@@ -196,6 +289,15 @@ ipcMain.handle('metadata:parseMultiple', async (_, filePaths: string[]): Promise
             if (firstKey) artworkCache.delete(firstKey);
           }
           artworkCache.set(cacheKey, artworkDataUrl);
+        }
+      }
+
+      // If no embedded artwork, look for folder artwork
+      if (!artworkDataUrl) {
+        const folderPath = path.dirname(filePath);
+        const folderArtwork = await findFolderArtwork(folderPath);
+        if (folderArtwork) {
+          artworkDataUrl = folderArtwork;
         }
       }
 
